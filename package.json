@@ -1,0 +1,46 @@
+{
+  "name": "rai",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "moment-timezone": "^0.5.11",
+    "morgan": "^1.7.0",
+    "randomstring": "^1.1.5",
+    "socket.io": "^1.4.6"
+  },
+  "version": "0.0.5",
+  "description": "router agent interface",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "coffee-script": "^1.12.2",
+    "coffeescript-concat": "^1.0.14"
+  },
+  "scripts": {
+    "clean"      : "rm -rf dist",
+    "precompile" : "mkdir dist && coffeescript-concat -I core -I core/Utils -o dist/precompile.coffee",
+    "pack"       : "cat dist/precompile.coffee index.coffee > dist/index.coffee && rm dist/precompile.coffee && coffee -c dist/index.coffee && rm dist/index.coffee",
+    "build"      : "npm run clean && npm run precompile && npm run pack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rabrux/rai.git"
+  },
+  "keywords": [
+    "agent",
+    "router",
+    "interface"
+  ],
+  "author": {
+    "name": "rabrux",
+    "email": "rabrux@alchimia.mx"
+  },
+  "maintainers": [
+    {
+      "name": "rabrux",
+      "email": "rabrux@alchimia.mx"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/rabrux/rai#readme"
+}
