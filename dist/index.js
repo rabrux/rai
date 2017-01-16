@@ -113,6 +113,25 @@
       return this.__level;
     };
 
+    Task.prototype.getUser = function(cb) {
+      var decoded, e, secret, token;
+      token = this.getToken();
+      if (!token) {
+        return this.end({
+          _id: task._id,
+          __level: '*'
+        });
+      }
+      secret = this.getSecret();
+      try {
+        decoded = jwt.decode(token, secret);
+      } catch (error) {
+        e = error;
+        return cb(e, null);
+      }
+      return cb(null, decoded);
+    };
+
     Task.prototype.setId = function(_id) {
       this._id = _id;
     };
