@@ -1,3 +1,5 @@
+fs = require 'fs'
+
 class Protocol
 
   constructor : ( @__smith, @__config ) ->
@@ -56,7 +58,25 @@ class Protocol
               next.res = res
               return
 
-            return task?.res?.send result
+            if result?.file
+              filename = result.file.name
+              file     = fs.createWriteStream filename
+              
+              file.on 'finish', ->
+                for k, v of result.file.headers
+                  task.res.setHeader k, v
+
+                filestream = fs.createReadStream filename
+                filestream.pipe task.res
+                fs.unlink filename
+              
+              file.write result.file.body
+              
+              file.end()
+
+            else
+
+              return task?.res?.send result
 
           .on 'err', ( err ) ->
             task = it.getAgent().findTask _id : err._id
