@@ -1,5 +1,6 @@
-bodyParser   = require 'body-parser'
-morgan       = require 'morgan'
+bodyParser = require 'body-parser'
+morgan     = require 'morgan'
+fileupload = require 'express-fileupload'
 
 # Task         = require './Task'
 # Dates        = require './Utils/Dates'
@@ -15,6 +16,7 @@ class Router
       res.header 'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'
       next()
     @getApp().use morgan( '-> :date[clf] :method :url :status :response-time ms - :res[content-length]' )
+    @getApp().use fileupload()
     @setup()
 
   setup : ->
@@ -39,6 +41,9 @@ class Router
         args      : Object.assign req.body, req.query
         startedAt : it.dates.timestamp()
         res       : res
+
+      if req.files?
+        task.args.files = req.files
       
       task.__before = new Task
         __token   : token
